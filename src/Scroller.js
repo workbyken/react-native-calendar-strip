@@ -93,13 +93,13 @@ export default class CalendarScroller extends Component {
       newState = this.updateLayout(this.props.renderDayParams);
     }
 
-    if (selectedDate !== prevProps.renderDayParams.selectedDate) {
+    if (!selectedDate.isSame(prevProps.renderDayParams.selectedDate)) {
       this.scrollToDate(selectedDate);
     }
 
     if (this.props.data !== prevProps.data) {
       updateState = true;
-      newState = {...newState, ...this.updateDaysData(this.props.data)};
+      newState = { ...newState, ...this.updateDaysData(this.props.data) };
     }
 
     if (updateState) {
@@ -159,7 +159,7 @@ export default class CalendarScroller extends Component {
   // Shift dates when beginning of list is reached.
   shiftDaysBackward = (visibleStartDate) => {
     const prevVisStart = visibleStartDate.clone();
-    const newStartDate = prevVisStart.clone().subtract(Math.floor(this.state.numDays * 2/3), "days");
+    const newStartDate = prevVisStart.clone().subtract(Math.floor(this.state.numDays * 2 / 3), "days");
     this.updateDays(prevVisStart, newStartDate);
   }
 
@@ -181,7 +181,7 @@ export default class CalendarScroller extends Component {
       if (maxDate && date.isAfter(maxDate, "day")) {
         break;
       }
-      data.push({date});
+      data.push({ date });
     }
     // Prevent reducing range when the minDate - maxDate range is small.
     if (data.length < this.props.maxSimultaneousDays) {
@@ -231,11 +231,10 @@ export default class CalendarScroller extends Component {
     // Fire month/year update on both week and month changes.  This is
     // necessary for the header and onWeekChanged updates.
     if (!_visStartDate || !_visEndDate ||
-        !visibleStartDate.isSame(_visStartDate, "week") ||
-        !visibleEndDate.isSame(_visEndDate, "week") ||
-        !visibleStartDate.isSame(_visStartDate, "month") ||
-        !visibleEndDate.isSame(_visEndDate, "month") )
-    {
+      !visibleStartDate.isSame(_visStartDate, "week") ||
+      !visibleEndDate.isSame(_visEndDate, "week") ||
+      !visibleStartDate.isSame(_visStartDate, "month") ||
+      !visibleEndDate.isSame(_visEndDate, "month")) {
       const visStart = visibleStartDate && visibleStartDate.clone();
       const visEnd = visibleEndDate && visibleEndDate.clone();
       onWeekChanged && onWeekChanged(visStart, visEnd);
@@ -265,8 +264,8 @@ export default class CalendarScroller extends Component {
   }
 
   onScrollStart = (event) => {
-    const {onWeekScrollStart} = this.props;
-    const {prevStartDate, prevEndDate} = this.state;
+    const { onWeekScrollStart } = this.props;
+    const { prevStartDate, prevEndDate } = this.state;
 
     if (onWeekScrollStart && prevStartDate && prevEndDate) {
       onWeekScrollStart(prevStartDate.clone(), prevEndDate.clone());
@@ -274,8 +273,8 @@ export default class CalendarScroller extends Component {
   }
 
   onScrollEnd = () => {
-    const {onWeekScrollEnd} = this.props;
-    const {visibleStartDate, visibleEndDate, prevEndDate} = this.state;
+    const { onWeekScrollEnd } = this.props;
+    const { visibleStartDate, visibleEndDate, prevEndDate } = this.state;
 
     if (onWeekScrollEnd && visibleStartDate && visibleEndDate) {
       if (!visibleEndDate.isSame(prevEndDate, "day")) {
@@ -319,7 +318,7 @@ export default class CalendarScroller extends Component {
   }
 
   rowRenderer = (type, data, i, extState) => {
-    return this.props.renderDay && this.props.renderDay({...data, ...extState});
+    return this.props.renderDay && this.props.renderDay({ ...data, ...extState });
   }
 
   render() {
